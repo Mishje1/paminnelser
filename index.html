@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mina Påminnelser</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      form {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      label {
+        margin-right: 10px;
+      }
+
+      input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        background-color: #4CAF50;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #3e8e41;
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        margin-bottom: 10px;
+        background-color: #f2f2f2;
+        padding: 10px;
+        border-radius: 4px;
+        cursor: move;
+      }
+
+      .delete {
+        float: right;
+        color: #fff;
+        background-color: #f44336;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .delete:hover {
+        background-color: #da190b;
+      }
+
+      @media screen and (max-width: 600px) {
+        form {
+          flex-direction: column;
+        }
+
+        input[type="text"] {
+          margin-bottom: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Mina Påminnelser</h1>
+      <form>
+        <label for="reminder">Lägg till en påminnelse:</label>
+        <input type="text" id="reminder" name="reminder" placeholder="Skriv en påminnelse...">
+        <button type="button" onclick="addReminder()">Lägg till</button>
+      </form>
+      <ul id="reminder-list">
+      </ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+    <script>
+      function addReminder() {
+        var reminderInput = document.getElementById("reminder");
+        var reminderList = document.getElementById("reminder-list");
+        var newReminder = document.createElement("li");
+        var deleteButton = document.createElement("button");
+        deleteButton.innerHTML = "Ta bort";
+        deleteButton.className = "delete";
+        deleteButton.onclick = function() {
+          reminderList.removeChild(newReminder);
+        };
+        newReminder.innerHTML = reminderInput.value
+        newReminder.appendChild(deleteButton);
+        reminderList.appendChild(newReminder);
+        reminderInput.value = "";
+        makeRemindersSortable();
+      }
+
+      function makeRemindersSortable() {
+        $("#reminder-list").sortable();
+        $("#reminder-list").disableSelection();
+      }
+    </script>
+  </body>
+</html>
