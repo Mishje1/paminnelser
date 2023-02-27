@@ -1,130 +1,294 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Mina Påminnelser</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <title>Påminnelser</title>
     <style>
       body {
+        background-color: #f7f7f7;
+        color: #333;
         font-family: Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
         margin: 0;
         padding: 0;
-      }
-
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
       }
 
       h1 {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0;
+        padding: 24px;
         text-align: center;
       }
 
-      form {
+      #reminder-form {
         display: flex;
-        align-items: center;
-        margin-bottom: 20px;
+        margin: 0 auto;
+        max-width: 600px;
+        padding: 24px;
       }
 
-      label {
-        margin-right: 10px;
-      }
-
-      input[type="text"] {
-        flex: 1;
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-
-      button {
-        padding: 10px 20px;
-        font-size: 16px;
+      #reminder-input {
         border: none;
-        background-color: #4CAF50;
-        color: #fff;
         border-radius: 4px;
+        flex-grow: 1;
+        font-size: 16px;
+        padding: 8px;
+      }
+
+      #add-reminder-button {
+        background-color: #4caf50;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
         cursor: pointer;
+        font-size: 16px;
+        margin-left: 8px;
+        padding: 8px;
       }
 
-      button:hover {
-        background-color: #3e8e41;
-      }
-
-      ul {
-        list-style-type: none;
-        margin: 0;
+      #reminder-list {
+        list-style: none;
+        margin: 0 auto;
+        max-width: 600px;
         padding: 0;
       }
 
-      li {
-        margin-bottom: 10px;
-        background-color: #f2f2f2;
-        padding: 10px;
+      .reminder {
+        background-color: #fff;
+        border: 1px solid #ddd;
         border-radius: 4px;
-        cursor: move;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        padding: 8px;
       }
 
-      .delete {
-        float: right;
-        color: #fff;
+      .reminder:hover {
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .reminder-text {
+        font-size: 16px;
+        flex-grow: 1;
+        margin-right: 8px;
+      }
+
+      .delete-reminder-button {
         background-color: #f44336;
+        border: none;
         border-radius: 4px;
+        color: #fff;
         cursor: pointer;
+        font-size: 16px;
+        padding: 8px;
       }
 
-      .delete:hover {
-        background-color: #da190b;
+      .delete-reminder-button:hover {
+        background-color: #c62828;
       }
 
-      @media screen and (max-width: 600px) {
-        form {
-          flex-direction: column;
-        }
+      /* Ljust läge */
+      .light-mode {
+        background-color: #f7f7f7;
+        color: #333;
+      }
 
-        input[type="text"] {
-          margin-bottom: 10px;
-        }
+      .light-mode h1 {
+        background-color: #fff;
+        border-bottom: 1px solid #ddd;
+        color: #333;
+      }
+
+      .light-mode #reminder-form {
+        background-color: #fff;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .light-mode #reminder-input {
+        background-color: #f7f7f7;
+      }
+
+      .light-mode #add-reminder-button {
+        background-color: #4caf50;
+        color: #fff;
+      }
+
+      .light-mode .reminder {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        color: #333;
+      }
+
+      .light-mode .reminder:hover {
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      }
+      .light-mode .delete-reminder-button {
+        background-color: #f44336;
+        color: #fff;
+      }
+
+      /* Mörkt läge */
+      .dark-mode {
+        background-color: #333;
+        color: #f7f7f7;
+      }
+
+      .dark-mode h1 {
+        background-color: #222;
+        border-bottom: 1px solid #444;
+        color: #f7f7f7;
+      }
+
+      .dark-mode #reminder-form {
+        background-color: #222;
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+      }
+
+      .dark-mode #reminder-input {
+        background-color: #333;
+        color: #f7f7f7;
+      }
+
+      .dark-mode #add-reminder-button {
+        background-color: #4caf50;
+        color: #f7f7f7;
+      }
+
+      .dark-mode .reminder {
+        background-color: #444;
+        border: 1px solid #333;
+        color: #f7f7f7;
+      }
+
+      .dark-mode .reminder:hover {
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+      }
+
+      .dark-mode .delete-reminder-button {
+        background-color: #f44336;
+        color: #f7f7f7;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h1>Mina Påminnelser</h1>
-      <form>
-        <label for="reminder">Lägg till en påminnelse:</label>
-        <input type="text" id="reminder" name="reminder" placeholder="Skriv en påminnelse...">
-        <button type="button" onclick="addReminder()">Lägg till</button>
-      </form>
-      <ul id="reminder-list">
-      </ul>
+    <h1>Påminnelser</h1>
+
+    <div id="warning">
+      <p>
+        Denna sida sparar ingenting du skriver, om du laddar om sidan försvinner alla påminnelser!
+      </p>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+    <div id="mode-toggle">
+      <button id="toggle-button">
+        <img
+          id="sun-icon"
+          src="https://img.icons8.com/material-rounded/24/000000/sun.png"
+          alt="Sun icon"
+        />
+        <img
+          id="moon-icon"
+          src="https://img.icons8.com/material-rounded/24/000000/moon.png"
+          alt="Moon icon"
+        />
+      </button>
+    </div>
+
+    <form id="reminder-form">
+      <input
+        type="text"
+        id="reminder-input"
+        placeholder="Skriv en påminnelse..."
+      />
+      <button type="submit" id="add-reminder-button">Lägg till</button>
+    </form>
+
+    <ul id="reminder-list"></ul>
+
     <script>
-      function addReminder() {
-        var reminderInput = document.getElementById("reminder");
-        var reminderList = document.getElementById("reminder-list");
-        var newReminder = document.createElement("li");
-        var deleteButton = document.createElement("button");
-        deleteButton.innerHTML = "Ta bort";
-        deleteButton.className = "delete";
-        deleteButton.onclick = function() {
-          reminderList.removeChild(newReminder);
-        };
-        newReminder.innerHTML = reminderInput.value
-        newReminder.appendChild(deleteButton);
-        reminderList.appendChild(newReminder);
-        reminderInput.value = "";
-        makeRemindersSortable();
+      // Hämta DOM-element
+      const modeToggle = document.getElementById("mode-toggle");
+      const toggleButton = document.getElementById("toggle-button");
+      const sunIcon = document.getElementById("sun-icon");
+      const moonIcon = document.getElementById("moon-icon");
+      const warning = document.getElementById("warning");
+
+      // Skapa tom array för påminnelser
+      let reminders = [];
+
+      // Ladda in tidigare sparade påminnelser
+      if (localStorage.getItem("reminders")) {
+        reminders = JSON.parse(localStorage.getItem("reminders"));
       }
 
-      function makeRemindersSortable() {
-        $("#reminder-list").sortable();
-        $("#reminder-list").disableSelection();
+      // Rendera påminnelser
+      function renderReminders() {
+        const reminderList = document.getElementById("reminder-list");
+        reminderList.innerHTML = "";
+
+        reminders.forEach((reminder, index) => {
+          const reminderItem = document.createElement("li");
+          reminderItem.classList.add("reminder");
+
+          const reminderText = document
+          reminderItem.innerText = reminder;
+
+          const deleteButton = document.createElement("button");
+          deleteButton.classList.add("delete-reminder-button");
+          deleteButton.innerText = "Ta bort";
+          deleteButton.addEventListener("click", () => {
+            reminders.splice(index, 1);
+            localStorage.setItem("reminders", JSON.stringify(reminders));
+            renderReminders();
+          });
+
+          reminderItem.appendChild(deleteButton);
+          reminderList.appendChild(reminderItem);
+        });
       }
+
+      // Lägg till påminnelse
+      const reminderForm = document.getElementById("reminder-form");
+      reminderForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const reminderInput = document.getElementById("reminder-input");
+        const reminder = reminderInput.value;
+
+        if (reminder) {
+          reminders.push(reminder);
+          localStorage.setItem("reminders", JSON.stringify(reminders));
+          renderReminders();
+          reminderInput.value = "";
+        }
+      });
+
+      // Byt mellan ljust och mörkt läge
+      let isDarkMode = false;
+
+      function toggleMode() {
+        isDarkMode = !isDarkMode;
+
+        if (isDarkMode) {
+          document.body.classList.add("dark-mode");
+          sunIcon.style.display = "none";
+          moonIcon.style.display = "inline-block";
+        } else {
+          document.body.classList.remove("dark-mode");
+          sunIcon.style.display = "inline-block";
+          moonIcon.style.display = "none";
+        }
+      }
+
+      toggleButton.addEventListener("click", toggleMode);
+
+      // Rendera påminnelser vid laddning
+      renderReminders();
     </script>
   </body>
 </html>
+
+     
